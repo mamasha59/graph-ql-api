@@ -14,7 +14,7 @@
     "nodemon": "^2.0.20"
   },
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "index.js"
   },
   "keywords": [],
   "author": "",
