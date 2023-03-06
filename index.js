@@ -10,6 +10,8 @@ const port = process.env.PORT || 3001;
 
 const app = express(); // создаем приложение
 
+app.use(express.json())
+
 // Полключаемся в базе
 connectMongooseDB()
 
