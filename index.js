@@ -15,7 +15,7 @@ app.use(express.json())
 // Полключаемся в базе
 connectMongooseDB()
 
-app.use('/graphql', graphqlHTTP({
+app.get('/graphql', graphqlHTTP({
     schema,
     graphiql: process.env.NODE_ENV === 'development',
 }))
