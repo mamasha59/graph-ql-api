@@ -14,8 +14,7 @@
     "nodemon": "^2.0.20"
   },
   "scripts": {
-    "start": "index.js",
-    "heroku-postbuild": "npm install --prefix client && npm run build --prefix client"
+    "start": "index.js"
   },
   "keywords": [],
   "author": "",
