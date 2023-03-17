@@ -1,4 +1,8 @@
 const Product = require("../models/Product");
+const Category = require("../models/Categories");
+
+const {ProductType, CategoryType} = require("../types/Types");
+
 const {
   GraphQLObjectType,
   GraphQLID,
@@ -8,30 +12,22 @@ const {
   GraphQLList,
 } = require("graphql");
 
-// product type
-const ProductType = new GraphQLObjectType({
-  name: "Product",
-  fields: () => ({
-    id: { type: GraphQLID },
-    img: { type: GraphQLString },
-    title: { type: GraphQLString },
-    decsiprion: { type: GraphQLString },
-    brend: { type: GraphQLString },
-    price: { type: GraphQLInt },
-    altDescription: { type: GraphQLString },
-    category: { type: GraphQLString },
-    article: { type: GraphQLInt },
-  }),
-});
-
 const Rootquery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
-    products: {
+    productsAll: {
       // получить весь список продуктов
       type: new GraphQLList(ProductType),
-      resolve() {
-        return Product.find();
+      resolve(parent, args) {
+        return Product.find().exec();
+      },
+    },
+    products: {
+      // получить весь список продуктов по категории
+      type: new GraphQLList(ProductType),
+      args: { category: { type:GraphQLString }},
+      resolve(parent, args) {
+        return Product.find(args).exec();
       },
     },
     product: {
@@ -41,6 +37,13 @@ const Rootquery = new GraphQLObjectType({
       resolve(parent, args) {
         return Product.findById(args.id);
       },
+    },
+    categories: {
+      // получить список категорий
+      type: new GraphQLList(CategoryType),
+      resolve(parent, args){
+        return Category.find().exec()
+      }
     },
   },
 });
@@ -79,6 +82,21 @@ const mutation = new GraphQLObjectType({
             Product.create()
             return product.save();
         }
+    },
+    addCategory:{
+      type: CategoryType,
+      args: {
+          nameRu: { type: GraphQLString },
+          linkName: { type: GraphQLString },
+      },
+      resolve(parent,arg){
+        const category = new Category({
+          nameRu: arg.nameRu,
+          linkName: arg.linkName,
+        })
+        Category.create()
+        return category.save()
+      }
     }
   },
 });
